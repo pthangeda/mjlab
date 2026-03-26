@@ -58,7 +58,7 @@
     <link rel="prev" title="Research" href="research.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-    <meta name="docbuild:last-update" content="Mar 17, 2026"/>
+    <meta name="docbuild:last-update" content="Mar 26, 2026"/>
   </head>
   
   
@@ -503,6 +503,9 @@ document.write(`
 <section id="added">
 <h3>Added<a class="headerlink" href="#added" title="Link to this heading">#</a></h3>
 <ul class="simple">
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">STAIRS_TERRAINS_CFG</span></code> terrain preset for progressive stair
+curriculum training and <code class="docutils literal notranslate"><span class="pre">&#64;terrain_preset</span></code> decorator for composing
+terrain configurations from reusable presets.</p></li>
 <li><p>Added cartpole balance and swingup tasks (<code class="docutils literal notranslate"><span class="pre">Mjlab-Cartpole-Balance</span></code> and
 <code class="docutils literal notranslate"><span class="pre">Mjlab-Cartpole-Swingup</span></code>) with a <a class="reference internal" href="tutorials/cartpole.html#tutorial-cartpole"><span class="std std-ref">tutorial</span></a>
 that walks through building an environment from scratch.</p></li>
@@ -531,6 +534,10 @@ each reward term with a running mean over ~1 second (<a class="extlink-issue ref
 <section id="changed">
 <h3>Changed<a class="headerlink" href="#changed" title="Link to this heading">#</a></h3>
 <ul class="simple">
+<li><p>In curriculum terrain mode, each terrain type now gets exactly one column
+(<code class="docutils literal notranslate"><span class="pre">num_cols</span></code> is set to <code class="docutils literal notranslate"><span class="pre">len(sub_terrains)</span></code>). The <code class="docutils literal notranslate"><span class="pre">proportion</span></code> field
+now controls robot spawning distribution across columns rather than column
+count. Random mode is unchanged (<a class="extlink-issue reference external" href="https://github.com/mujocolab/mjlab/issues/811">#811</a>).</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">BoxSteppingStonesTerrainCfg</span></code> stone size now decreases with difficulty,
 interpolating from the large end of <code class="docutils literal notranslate"><span class="pre">stone_size_range</span></code> at difficulty 0
 to the small end at difficulty 1 (<a class="extlink-issue reference external" href="https://github.com/mujocolab/mjlab/issues/785">#785</a>).</p></li>
@@ -617,6 +624,17 @@ migrated on load.</p></li>
 to bodies with configurable duration and optional application point offset.</p></li>
 <li><p>ONNX auto-export and metadata attachment for manipulation tasks (lift cube)
 on every checkpoint save, matching the velocity and tracking task behavior.</p></li>
+<li><p>Multi-frame <code class="docutils literal notranslate"><span class="pre">RayCastSensor</span></code>: pass a tuple of <code class="docutils literal notranslate"><span class="pre">ObjRef</span></code> to <code class="docutils literal notranslate"><span class="pre">frame</span></code> for
+per-site raycasting with independent body exclusion. New properties:
+<code class="docutils literal notranslate"><span class="pre">num_frames</span></code>, <code class="docutils literal notranslate"><span class="pre">num_rays_per_frame</span></code>. New <code class="docutils literal notranslate"><span class="pre">RayCastData</span></code> fields:
+<code class="docutils literal notranslate"><span class="pre">frame_pos_w</span></code> and <code class="docutils literal notranslate"><span class="pre">frame_quat_w</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RingPatternCfg</span></code> ray pattern for concentric ring sampling around each
+frame.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TerrainHeightSensor</span></code>, a <code class="docutils literal notranslate"><span class="pre">RayCastSensor</span></code> subclass that computes
+per-frame vertical clearance above terrain (<code class="docutils literal notranslate"><span class="pre">sensor.data.heights</span></code>).
+Velocity task configs now use it for <code class="docutils literal notranslate"><span class="pre">feet_clearance</span></code>,
+<code class="docutils literal notranslate"><span class="pre">feet_swing_height</span></code>, and <code class="docutils literal notranslate"><span class="pre">foot_height</span></code>, replacing the previous
+world-Z proxy that was incorrect on rough terrain.</p></li>
 <li><p>Cloud training support via <a class="reference external" href="https://skypilot.readthedocs.io/">SkyPilot</a>
 and Lambda Cloud, with documentation covering setup, monitoring, and
 cost management.</p></li>
@@ -967,7 +985,7 @@ By The mjlab Developers
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Mar 17, 2026.
+  Last updated on Mar 26, 2026.
   <br/>
 </p>
   </div>

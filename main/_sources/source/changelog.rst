@@ -8,6 +8,9 @@ Upcoming version (not yet released)
 Added
 ^^^^^
 
+- Added ``STAIRS_TERRAINS_CFG`` terrain preset for progressive stair
+  curriculum training and ``@terrain_preset`` decorator for composing
+  terrain configurations from reusable presets.
 - Added cartpole balance and swingup tasks (``Mjlab-Cartpole-Balance`` and
   ``Mjlab-Cartpole-Swingup``) with a :ref:`tutorial <tutorial-cartpole>`
   that walks through building an environment from scratch.
@@ -35,6 +38,10 @@ Added
 Changed
 ^^^^^^^
 
+- In curriculum terrain mode, each terrain type now gets exactly one column
+  (``num_cols`` is set to ``len(sub_terrains)``). The ``proportion`` field
+  now controls robot spawning distribution across columns rather than column
+  count. Random mode is unchanged (:issue:`811`).
 - ``BoxSteppingStonesTerrainCfg`` stone size now decreases with difficulty,
   interpolating from the large end of ``stone_size_range`` at difficulty 0
   to the small end at difficulty 1 (:issue:`785`).
@@ -118,6 +125,17 @@ Added
   to bodies with configurable duration and optional application point offset.
 - ONNX auto-export and metadata attachment for manipulation tasks (lift cube)
   on every checkpoint save, matching the velocity and tracking task behavior.
+- Multi-frame ``RayCastSensor``: pass a tuple of ``ObjRef`` to ``frame`` for
+  per-site raycasting with independent body exclusion. New properties:
+  ``num_frames``, ``num_rays_per_frame``. New ``RayCastData`` fields:
+  ``frame_pos_w`` and ``frame_quat_w``.
+- ``RingPatternCfg`` ray pattern for concentric ring sampling around each
+  frame.
+- ``TerrainHeightSensor``, a ``RayCastSensor`` subclass that computes
+  per-frame vertical clearance above terrain (``sensor.data.heights``).
+  Velocity task configs now use it for ``feet_clearance``,
+  ``feet_swing_height``, and ``foot_height``, replacing the previous
+  world-Z proxy that was incorrect on rough terrain.
 - Cloud training support via `SkyPilot <https://skypilot.readthedocs.io/>`_
   and Lambda Cloud, with documentation covering setup, monitoring, and
   cost management.
